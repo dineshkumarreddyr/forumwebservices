@@ -21,11 +21,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', routes);
-//Users API
-app.post('/signup',users.signup);
-
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, Origin, Accept');
@@ -38,6 +33,10 @@ app.use(function (req, res, next) {
     else
         next();
 });
+
+app.use('/', routes);
+//Users API
+app.post('/signup',users.signup);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
