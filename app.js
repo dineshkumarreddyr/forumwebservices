@@ -37,6 +37,8 @@ app.use(function (req, res, next) {
 app.use('/', routes);
 //Users API
 app.post('/signup',users.signup);
+app.post('/signin',users.login);
+app.post('/iquery',users.createquery);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

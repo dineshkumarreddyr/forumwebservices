@@ -30,3 +30,55 @@ exports.signup = function(req,res) {
         console.log(e.message);
     }
 };
+
+//Login
+exports.login = function(req,res) {
+    var data = req.body;
+    try {
+        if (data.pass == undefined || data.pass == null) {
+            res.send({"status": "error", "ecode": "e3", "emsg": "Password missing"});
+            return;
+        }
+        encryptedPassword = config.module.passwordEncrypt(data.pass);
+        if (encryptedPassword == undefined || encryptedPassword == null) {
+            res.send({"status": "error", "ecode": "e4", "emsg": "Password encryption failed"});
+            return;
+        }
+        common.dbQuery(config.module.dbConfig, "CALL forumweb.SP_LOGIN('" + data.user + "'," +
+        "'" + encryptedPassword + "')", function (error, records) {
+            if (!error) {
+                if (records && records[0] != undefined) {
+                    res.send({"status": "success", "records": records[0]});
+                }
+                else {
+                    res.send({"status": "error", "ecode": "e3", "emsg": "Invalid data"});
+                }
+            }
+            else {
+                res.send({"status": "error", "ecode": "e5", "emsg": "API failed"});
+            }
+        });
+    }
+    catch (e) {
+        console.log(e.message);
+    }
+};
+
+//Enter your query
+exports.createquery = function(req,res) {
+    var data = req.body;
+    try {
+        common.dbQuery(config.module.dbConfig, "CALL forumweb.SP_CREATEQUERY('" + data.category + "'," +
+        "'" + data.topic + "','" + data.description + "','" + data.user + "')", function (error, records) {
+            if (!error) {
+                res.send({"status": "success", "records": records[0]});
+            }
+            else {
+                res.send({"status": "error", "ecode": "e5", "emsg": "API failed"});
+            }
+        });
+    }
+    catch (e) {
+        console.log(e.message);
+    }
+};
