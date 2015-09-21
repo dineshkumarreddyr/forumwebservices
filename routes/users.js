@@ -82,3 +82,20 @@ exports.createquery = function(req,res) {
         console.log(e.message);
     }
 };
+
+//Get list of categories
+exports.getQueries = function(req,res) {
+    try {
+        common.dbQuery(config.module.dbConfig, "CALL forumweb.SP_GETQUERY()", function (error, records) {
+            if (!error) {
+                res.send({"status": "success", "records": records[0]});
+            }
+            else {
+                res.send({"status": "error", "ecode": "e5", "emsg": "API failed"});
+            }
+        });
+    }
+    catch (e) {
+        console.log(e.message);
+    }
+};

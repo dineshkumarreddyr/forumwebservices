@@ -39,6 +39,7 @@ app.use('/', routes);
 app.post('/signup',users.signup);
 app.post('/signin',users.login);
 app.post('/iquery',users.createquery);
+app.get('/gquery',users.getQueries);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
