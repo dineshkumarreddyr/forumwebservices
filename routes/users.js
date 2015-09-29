@@ -99,3 +99,40 @@ exports.getQueries = function(req,res) {
         console.log(e.message);
     }
 };
+
+//Reply to an query
+exports.queryreply = function(req,res) {
+    var data = req.body;
+    try {
+        common.dbQuery(config.module.dbConfig, "CALL forumweb.SP_SAVEQUERY('" + data.post + "','" + data.category + "'," +
+        "'" + data.topicid + "','" + data.username + "')", function (error, records) {
+            if (!error) {
+                res.send({"status": "success", "records": records[0]});
+            }
+            else {
+                res.send({"status": "error", "ecode": "e5", "emsg": "API failed"});
+            }
+        });
+    }
+    catch (e) {
+        console.log(e.message);
+    }
+};
+
+//Get List of posts
+exports.getPosts = function(req,res){
+  var id = req.params.id;
+    try{
+        common.dbQuery(config.module.dbConfig, "CALL forumweb.SP_GETPOSTS('" + id + "')", function (error, records) {
+            if (!error) {
+                res.send({"status": "success", "records": records[0]});
+            }
+            else {
+                res.send({"status": "error", "ecode": "e5", "emsg": "API failed"});
+            }
+        });
+    }
+    catch (e){
+        console.log(e.message);
+    }
+};
